@@ -1,0 +1,352 @@
+:root {
+    --background-color: #121212;
+    --surface-color: #1E1E1E;
+    --primary-text-color: #E0E0E0;
+    --secondary-text-color: #A0A0A0;
+    --accent-color: #00C6F7;
+    --border-color: #2A2A2A;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --hover-surface-color: #2A2A2A;
+    --hover-accent-color: #00a5d1;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+    margin: 0;
+}
+
+.dashboard-body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* --- Page de Connexion --- */
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.login-logo {
+    height: 170px;
+    margin-bottom: 40px;
+}
+
+.login-box {
+    background-color: var(--surface-color);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-box h1 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    font-size: 24px;
+}
+
+.login-box .error-message {
+    color: var(--error-color);
+    margin-top: 15px;
+    min-height: 20px;
+}
+
+/* --- Tableau de bord --- */
+
+.dashboard-header {
+    padding: 0px 30px; /* Réduction du padding vertical */
+    text-align: center;
+    flex-shrink: 0; /* Empêche l'en-tête de rétrécir */
+    background-color: var(--background-color); /* Assure un fond uni */
+    border-bottom: 1px solid var(--surface-color);
+}
+
+.dashboard-logo {
+    height: 150px; /* Taille ajustée pour un meilleur équilibre */
+    width: 160px;
+    margin: 0;
+}
+
+.dashboard-main-content {
+    flex-grow: 1; /* Prend l'espace restant */
+    overflow-y: auto; /* Permet le défilement du contenu principal */
+    padding: 20px 30px 30px; /* Ajustement du padding */
+    display: flex;
+    justify-content: center;
+}
+
+.dashboard-container {
+    width: 100%;
+    max-width: 1200px;
+    background-color: var(--surface-color);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    position: relative;
+    height: fit-content; /* S'assure que le conteneur ne dépasse pas son contenu */
+}
+
+.logout-button {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background-color: var(--error-color);
+}
+
+.tabs-header {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 25px;
+}
+
+.tab-button {
+    padding: 12px 20px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--secondary-text-color);
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.tab-button:hover {
+    color: var(--primary-text-color);
+}
+
+.tab-button.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.content-section {
+    margin-bottom: 35px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+}
+.content-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.content-section h2, .content-section h3 {
+    margin-top: 0;
+    color: var(--primary-text-color);
+    margin-bottom: 20px;
+}
+
+/* --- Éléments de formulaire & Boutons --- */
+
+input[type="text"], input[type="password"] {
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 198, 247, 0.2);
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px; /* Aligné avec les autres inputs */
+}
+
+.password-container input {
+    margin-bottom: 0; /* Annule la marge du champ pour la mettre sur le conteneur */
+    padding-right: 45px; /* Espace pour l'icône */
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    user-select: none;
+    font-style: normal;
+}
+
+button, .btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover, .btn:hover {
+    transform: translateY(-1px);
+}
+
+button:active, .btn:active {
+    transform: translateY(0);
+}
+
+.btn.primary, form button[type="submit"] {
+    background-color: var(--accent-color);
+    color: var(--background-color);
+}
+.btn.primary:hover, form button[type="submit"]:hover {
+    background-color: var(--hover-accent-color);
+}
+
+button:disabled {
+    background-color: var(--border-color);
+    color: var(--secondary-text-color);
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* --- Listes & Tableaux --- */
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+ul li:last-child {
+    border-bottom: none;
+}
+
+#bt-devices-list li button {
+    margin-left: 15px;
+    float: right;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table th, table td {
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    text-align: left;
+}
+
+table th {
+    background-color: var(--hover-surface-color);
+}
+
+/* Style pour le bouton de déconnexion */
+.logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.logout-button:hover {
+    background-color: #ff8e8e;
+}
+
+/* --- Responsive Design --- */
+
+/* Tablettes (max-width: 992px) */
+@media (max-width: 992px) {
+    .dashboard-wrapper {
+        padding: 20px;
+    }
+
+    .dashboard-container {
+        padding: 20px;
+    }
+
+    .logout-button {
+        top: 20px;
+        right: 20px;
+    }
+}
+
+/* Mobiles (max-width: 768px) */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .dashboard-wrapper {
+        padding: 15px;
+    }
+
+    .dashboard-logo {
+        height: 50px;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-container {
+        padding: 15px;
+    }
+
+    .tabs-header {
+        flex-wrap: wrap; /* Permet aux onglets de passer à la ligne */
+    }
+
+    .tab-button {
+        padding: 10px 15px;
+        font-size: 14px;
+        flex-grow: 1; /* Pour que les boutons prennent toute la largeur disponible */
+        text-align: center;
+    }
+
+    .logout-button {
+        position: static; /* Le bouton n'est plus en position absolue */
+        width: 100%;
+        margin-top: 20px;
+        order: 3; /* Pour le placer après le contenu des onglets */
+    }
+
+    .login-box {
+        padding: 20px;
+        margin: 0 15px;
+    }
+
+    .content-section h2 {
+        font-size: 1.2em;
+    }
+}

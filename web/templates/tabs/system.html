@@ -1,0 +1,30 @@
+<div class="content-section">
+    <h2>Informations sur le dispositif</h2>
+    <ul id="device-info">
+        <li><strong>Nom :</strong> <span id="device-name">Chargement...</span></li>
+        <li><strong>Matricule :</strong> <span id="device-id">Chargement...</span></li>
+        <li><strong>Adresse MAC :</strong> <span id="device-mac">Chargement...</span></li>
+        <li><strong>Version logicielle :</strong> <span id="sw-version">Chargement...</span></li>
+        <li><strong>Version matérielle :</strong> <span id="hw-version">Chargement...</span></li>
+    </ul>
+</div>
+<div class="content-section">
+    <h2>Changer le mot de passe</h2>
+    <form id="password-change-form">
+        <div class="form-group">
+            <label for="old_password">Ancien mot de passe</label>
+            <div class="password-container">
+                <input type="password" id="old_password" name="old_password" required>
+                <span class="password-toggle-icon">👁️</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="new_password">Nouveau mot de passe</label>
+            <div class="password-container">
+                <input type="password" id="new_password" name="new_password" required>
+                <span class="password-toggle-icon">👁️</span>
+            </div>
+        </div>
+        <button type="submit" class="btn primary">Mettre à jour</button>
+    </form>
+</div>

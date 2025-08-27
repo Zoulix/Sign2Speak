@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - S2S</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body class="login-container">
+    <img src="/static/assets/images/logo-1.png" alt="Logo Sign2Speak" class="login-logo">
+    <div class="login-box">
+        <form id="login-form">
+            <h1>Connexion</h1>
+            <input type="text" id="username" name="username" placeholder="Nom d'utilisateur" required>
+            <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit" class="btn primary">Se connecter</button>
+            <p id="error-message" class="error-message"></p>
+        </form>
+    </div>
+    <p class="intro-text">L'application Sign2Speak facilite la gestion et l'utilisation de votre dispositif.</p>
+    <script src="/static/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+python-multipart
+python-jose[cryptography]
+passlib==1.7.4
+bcrypt==3.2.2
+# pynacl (uniquement nécessaire pour la compilation de bcrypt sur certains environnements Windows)
+opencv-python

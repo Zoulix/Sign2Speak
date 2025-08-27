@@ -1,0 +1,25 @@
+# --- Environnement Virtuel ---
+# Exclut le dossier de l'environnement virtuel Python
+env/
+venv/
+*.venv
+
+# --- Fichiers de Cache Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Fichiers de Configuration Générés ---
+# Ne pas versionner le fichier de configuration utilisateur pour permettre
+# une configuration par défaut sur chaque nouvelle machine.
+user_config.json
+
+# --- Fichiers de Configuration de l'Éditeur ---
+.vscode/
+.idea/
+
+# --- Fichiers de Build/Distribution ---
+build/
+dist/
+*.egg-info/

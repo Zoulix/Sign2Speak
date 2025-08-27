@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord - S2S</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body class="dashboard-body">
+    <header class="dashboard-header">
+        <img src="/static/assets/images/logo-1.png" alt="Logo Sign2Speak" class="dashboard-logo">
+    </header>
+    <main class="dashboard-main-content">
+        <div class="dashboard-container">
+        <button class="btn logout-button" id="logout-button">Déconnexion</button>
+        <div class="tabs-header">
+            <button class="tab-button active" data-tab="systeme">Système</button>
+            <button class="tab-button" data-tab="wifi">Paramètres Wi-Fi</button>
+            <button class="tab-button" data-tab="reseau">Réseau</button>
+            <button class="tab-button" data-tab="bluetooth">Appareillage Bluetooth</button>
+        </div>
+
+        <div class="tabs-content" id="tabs-content-container">
+            <!-- Le contenu des onglets sera chargé ici par JavaScript -->
+            </div>
+        </div>
+    </main>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
