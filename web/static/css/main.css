@@ -26,7 +26,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow: hidden;
+    /* overflow: hidden; a été retiré pour permettre le défilement si nécessaire */
 }
 
 /* --- Page de Connexion --- */
@@ -87,6 +87,7 @@ body {
     padding: 20px 30px 30px; /* Ajustement du padding */
     display: flex;
     justify-content: center;
+    -webkit-overflow-scrolling: touch; /* Ajout pour un défilement fluide sur iOS */
 }
 
 .dashboard-container {
@@ -290,7 +291,7 @@ table th {
 
 /* Tablettes (max-width: 992px) */
 @media (max-width: 992px) {
-    .dashboard-wrapper {
+    .dashboard-main-content {
         padding: 20px;
     }
 
@@ -307,38 +308,57 @@ table th {
 /* Mobiles (max-width: 768px) */
 @media (max-width: 768px) {
     body {
-        font-size: 14px;
+        font-size: 15px; /* Légère augmentation pour la lisibilité */
     }
 
-    .dashboard-wrapper {
-        padding: 15px;
+    .dashboard-body {
+        height: auto; /* Permet le défilement sur mobile */
+    }
+
+    .dashboard-header {
+        padding: 0 15px;
     }
 
     .dashboard-logo {
-        height: 50px;
-        margin-bottom: 20px;
+        height: 120px; /* Logo un peu plus grand */
+    }
+
+    .dashboard-main-content {
+        padding: 15px;
     }
 
     .dashboard-container {
         padding: 15px;
+        display: flex; /* Utilisation de flexbox pour réorganiser */
+        flex-direction: column;
     }
 
     .tabs-header {
-        flex-wrap: wrap; /* Permet aux onglets de passer à la ligne */
+        flex-direction: column; /* Empile les onglets verticalement */
+        margin-bottom: 20px;
+        order: 1; /* Onglets en premier */
     }
 
     .tab-button {
-        padding: 10px 15px;
-        font-size: 14px;
-        flex-grow: 1; /* Pour que les boutons prennent toute la largeur disponible */
+        font-size: 16px;
         text-align: center;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .tab-button.active {
+        border-bottom-color: var(--accent-color); /* Garde la bordure active visible */
+    }
+
+    .tabs-content {
+        order: 2; /* Contenu après les onglets */
     }
 
     .logout-button {
         position: static; /* Le bouton n'est plus en position absolue */
         width: 100%;
         margin-top: 20px;
-        order: 3; /* Pour le placer après le contenu des onglets */
+        order: 3; /* Bouton de déconnexion en dernier */
+        text-align: center;
     }
 
     .login-box {
@@ -347,6 +367,26 @@ table th {
     }
 
     .content-section h2 {
-        font-size: 1.2em;
+        font-size: 1.3em;
+    }
+
+    /* Rend les tableaux défilables horizontalement */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Défilement fluide sur iOS */
+    }
+
+    #bt-devices-list li {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #bt-devices-list li button {
+        float: none;
+        margin-left: 0;
+        margin-top: 10px; /* Espace entre le nom et le bouton */
+        width: 100%;
+        text-align: center;
     }
 }

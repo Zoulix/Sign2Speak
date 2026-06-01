@@ -23,3 +23,6 @@ user_config.json
 build/
 dist/
 *.egg-info/
+
+# --- Fichiers de moteur ---
+moteur_trad_pi/

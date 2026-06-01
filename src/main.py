@@ -10,7 +10,8 @@ import asyncio
 
 from . import models
 from .utils import security
-from .utils.config import FAKE_DB, FAKE_WIFI_CONFIG, FAKE_BT_STATUS, FAKE_SCANNED_DEVICES, save_user_db
+from .utils.config import FAKE_DB, FAKE_WIFI_CONFIG, save_user_db
+from .utils.bluetooth_manager import bluetooth_manager
 
 # Initialisation de l'application
 app = FastAPI()
@@ -141,45 +142,51 @@ async def get_connected_devices(user: dict = Depends(security.get_current_user))
     ]
 
 @app.get("/api/bluetooth/status", response_model=models.BluetoothStatus)
-async def get_bluetooth_status(user: dict = Depends(security.get_current_user)):
-    return FAKE_BT_STATUS
+def get_bluetooth_status(user: dict = Depends(security.get_current_user)):
+    return bluetooth_manager.get_status()
 
 @app.post("/api/bluetooth/scan", response_model=list[models.BluetoothDevice])
-async def scan_bluetooth_devices(user: dict = Depends(security.get_current_user)):
-    # Simule un scan de 5 secondes
-    await asyncio.sleep(5)
-    return FAKE_SCANNED_DEVICES
+def scan_bluetooth_devices(user: dict = Depends(security.get_current_user)):
+    """Scanne les appareils Bluetooth audio disponibles"""
+    devices = bluetooth_manager.scan_devices(duration=8)
+    return devices
 
 @app.post("/api/bluetooth/connect")
-async def connect_bluetooth_device(payload: models.ConnectRequest, user: dict = Depends(security.get_current_user)):
-    device_to_connect = next((d for d in FAKE_SCANNED_DEVICES if d.mac_address == payload.mac_address), None)
-    if not device_to_connect:
-        raise HTTPException(status_code=404, detail="Appareil non trouvé.")
+def connect_bluetooth_device(payload: models.ConnectRequest, user: dict = Depends(security.get_current_user)):
+    """Connecte un appareil Bluetooth (Pair -> Trust -> Connect -> Audio Routing)"""
+    success = bluetooth_manager.connect_device(payload.mac_address)
+    if not success:
+        raise HTTPException(status_code=400, detail="Échec de la connexion à l'appareil.")
     
-    FAKE_BT_STATUS.connected_device = device_to_connect
-    return {"success": True, "message": f"Connecté à {device_to_connect.name}"}
+    status = bluetooth_manager.get_status()
+    return {"success": True, "message": f"Connecté à {status.connected_device.name}"}
 
 @app.post("/api/bluetooth/disconnect")
-async def disconnect_bluetooth_device(user: dict = Depends(security.get_current_user)):
-    if FAKE_BT_STATUS.is_translating:
-        raise HTTPException(status_code=400, detail="Veuillez d'abord arrêter la traduction.")
-    FAKE_BT_STATUS.connected_device = None
+def disconnect_bluetooth_device(user: dict = Depends(security.get_current_user)):
+    """Déconnecte l'appareil Bluetooth actuel"""
+    success = bluetooth_manager.disconnect_device()
+    if not success:
+        raise HTTPException(status_code=400, detail="Échec de la déconnexion.")
+    
     return {"success": True, "message": "Appareil déconnecté."}
 
 @app.post("/api/bluetooth/translation/start")
-async def start_translation(user: dict = Depends(security.get_current_user)):
-    if not FAKE_BT_STATUS.connected_device:
-        raise HTTPException(status_code=400, detail="Aucun appareil Bluetooth n'est connecté.")
-    FAKE_BT_STATUS.is_translating = True
+def start_translation(user: dict = Depends(security.get_current_user)):
+    """Démarre la traduction (requiert un appareil connecté)"""
+    success = bluetooth_manager.start_translation()
+    if not success:
+        raise HTTPException(status_code=400, detail="Impossible de démarrer la traduction.")
+    
     return {"success": True, "message": "Traduction démarrée."}
+
+@app.post("/api/bluetooth/translation/stop")
+def stop_translation(user: dict = Depends(security.get_current_user)):
+    """Arrête la traduction"""
+    success = bluetooth_manager.stop_translation()
+    return {"success": True, "message": "Traduction arrêtée."}
 
 @app.post("/logout")
 async def logout(response: Response):
     """Déconnecte l'utilisateur en supprimant le cookie d'accès."""
     response.delete_cookie("access_token")
     return {"success": True, "message": "Déconnexion réussie"}
-
-@app.post("/api/bluetooth/translation/stop")
-async def stop_translation(user: dict = Depends(security.get_current_user)):
-    FAKE_BT_STATUS.is_translating = False
-    return {"success": True, "message": "Traduction arrêtée."}
