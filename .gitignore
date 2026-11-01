@@ -24,5 +24,22 @@ build/
 dist/
 *.egg-info/
 
-# --- Fichiers de moteur ---
-moteur_trad_pi/
+# --- Fichiers de moteur de traduction de test (non utilisés en production) ---
+moteur_trad_pi/mot_traduc*.py
+moteur_trad_pi/moteur_traduction_pi.py
+moteur_trad_pi/requirements.txt
+
+# --- Modèles ML lourds (à télécharger séparément) ---
+moteur_trad_pi/Model/*.tflite
+moteur_trad_pi/Model/*.gguf
+moteur_trad_pi/piper/
+
+# --- Fichiers Bluetooth de test (non utilisés en production) ---
+bt_manage3.py
+bt_manager.py
+test_bluetooth.py
+bluetooth_manager_1.py
+
+# --- Dossiers et fichiers vides ou inutilisés ---
+src/modules/
+boot_service/start_service.sh

@@ -1,0 +1,14 @@
+[Unit]
+Description=Serveur FastAPI Sign2Speak
+After=network.target sound.target
+
+[Service]
+User=${USER}
+Environment=XDG_RUNTIME_DIR=/run/user/${UID}
+WorkingDirectory=${PROJECT_PATH}
+ExecStart=${VENV_PATH}/bin/python -m uvicorn src.main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
