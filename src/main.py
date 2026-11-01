@@ -12,6 +12,10 @@ from . import models
 from .utils import security
 from .utils.config import FAKE_DB, FAKE_WIFI_CONFIG, save_user_db
 from .utils.bluetooth_manager import bluetooth_manager
+from .utils.translation_engine import translation_engine
+import cv2
+import numpy as np
+from fastapi.responses import StreamingResponse
 
 # Initialisation de l'application
 app = FastAPI()
@@ -173,17 +177,42 @@ def disconnect_bluetooth_device(user: dict = Depends(security.get_current_user))
 @app.post("/api/bluetooth/translation/start")
 def start_translation(user: dict = Depends(security.get_current_user)):
     """Démarre la traduction (requiert un appareil connecté)"""
-    success = bluetooth_manager.start_translation()
+    if not bluetooth_manager.connected_device:
+        raise HTTPException(status_code=400, detail="Aucun appareil Bluetooth n'est connecté.")
+    
+    # Démarrer le moteur de traduction
+    success = translation_engine.start()
     if not success:
         raise HTTPException(status_code=400, detail="Impossible de démarrer la traduction.")
     
+    bluetooth_manager.is_translating = True
     return {"success": True, "message": "Traduction démarrée."}
 
 @app.post("/api/bluetooth/translation/stop")
 def stop_translation(user: dict = Depends(security.get_current_user)):
     """Arrête la traduction"""
-    success = bluetooth_manager.stop_translation()
+    # Arrêter le moteur de traduction
+    success = translation_engine.stop()
+    bluetooth_manager.is_translating = False
     return {"success": True, "message": "Traduction arrêtée."}
+
+@app.get("/api/video/frame")
+def get_video_frame():
+    """Endpoint pour obtenir un frame individuel (JPEG)"""
+    if translation_engine.is_running and translation_engine.current_frame is not None:
+        ret, buffer = cv2.imencode('.jpg', translation_engine.current_frame)
+        if ret:
+            return Response(content=buffer.tobytes(), media_type="image/jpeg")
+    
+    # Frame noir si le moteur n'est pas actif
+    blank_frame = np.zeros((480, 640, 3), dtype=np.uint8)
+    cv2.putText(blank_frame, "Traduction non demarree", (150, 240), 
+                cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+    ret, buffer = cv2.imencode('.jpg', blank_frame)
+    if ret:
+        return Response(content=buffer.tobytes(), media_type="image/jpeg")
+    
+    return Response(status_code=500)
 
 @app.post("/logout")
 async def logout(response: Response):

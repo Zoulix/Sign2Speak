@@ -11,12 +11,14 @@ import re
 from typing import List, Optional, Dict, Any
 
 from .. import models
+from .translation_engine import translation_engine
 
 
 class BluetoothManager:
     """Gestionnaire pour les opérations Bluetooth via BlueZ"""
     
     def __init__(self):
+        """Initialise le gestionnaire Bluetooth"""
         # On s'assure que le Bluetooth est activé au démarrage
         try:
             subprocess.run(['bluetoothctl', 'power', 'on'], check=True, capture_output=True)
@@ -150,8 +152,27 @@ class BluetoothManager:
                     mac_address=mac_address
                 )
                 
+                # Récupérer le sink audio pour le routage
+                bt_sink = self.get_sink_name(mac_address)
+                
                 # Router l'audio vers l'appareil
-                self._route_audio_to_device(mac_address)
+                if bt_sink:
+                    print(f"✅ Sink Bluetooth trouvé : {bt_sink}")
+                    self._route_audio_to_device(mac_address)
+                else:
+                    print("⚠️ Sink non trouvé, l'audio ira sur la sortie par défaut.")
+                
+                # Initialiser le moteur de traduction (charger les modèles)
+                print("Initialisation du moteur de traduction...")
+                try:
+                    # Passer le sink au moteur de traduction
+                    from .translation_engine import translation_engine
+                    translation_engine.bt_sink = bt_sink
+                    if translation_engine.text_to_speech:
+                        translation_engine.text_to_speech.set_sink(bt_sink)
+                    print("Moteur de traduction prêt")
+                except Exception as e:
+                    print(f"Erreur lors de l'initialisation du moteur: {e}")
                 
                 return True
             else:
@@ -193,6 +214,41 @@ class BluetoothManager:
         except subprocess.CalledProcessError as e:
             print(f"Échec de la déconnexion: {e}")
             return False
+    
+    def get_sink_name(self, mac_address: str) -> Optional[str]:
+        """
+        Retrouve le nom du sink PipeWire/PulseAudio correspondant à l'adresse MAC.
+        
+        Args:
+            mac_address: Adresse MAC de l'appareil Bluetooth
+            
+        Returns:
+            Nom du sink audio ou None si non trouvé
+        """
+        mac_fmt = mac_address.replace(":", "_")
+        
+        # Méthode 1: via pw-cli (PipeWire)
+        try:
+            out = subprocess.run(['pw-cli', 'list-objects'], capture_output=True, text=True)
+            for line in out.stdout.splitlines():
+                if mac_fmt in line and "sink" in line.lower():
+                    return line.strip()
+        except FileNotFoundError:
+            pass  # pw-cli n'est pas disponible
+        
+        # Méthode 2: via pactl (PulseAudio)
+        try:
+            out2 = subprocess.run(['pactl', 'list', 'sinks', 'short'], capture_output=True, text=True)
+            for line in out2.stdout.splitlines():
+                if mac_fmt in line:
+                    # Le format est: NAME MODULE SAMPLE_RATE CHANNELS
+                    parts = line.split()
+                    if len(parts) >= 2:
+                        return parts[1]  # nom du sink
+        except FileNotFoundError:
+            pass  # pactl n'est pas disponible
+        
+        return None
     
     def _route_audio_to_device(self, mac_address: str) -> bool:
         """

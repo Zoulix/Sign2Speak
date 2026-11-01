@@ -4,8 +4,14 @@ import re
 
 class BluetoothManager:
     def __init__(self):
-        # On s'assure que le Bluetooth est activé au démarrage du script
-        subprocess.run(['bluetoothctl', 'power', 'on'], check=True)
+        # Activer le Bluetooth et l'agent dans une seule commande bluetoothctl
+        commands = """
+        power on
+        agent KeyboardDisplay
+        default-agent
+        quit
+        """
+        subprocess.run(['bluetoothctl'], input=commands.strip(), text=True, capture_output=True)
 
     def scan_devices(self, duration=8):
         print(f"--- Recherche d'appareils ({duration}s)... ---")

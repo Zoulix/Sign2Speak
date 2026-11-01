@@ -4,6 +4,13 @@
     <button id="bt-disconnect-btn" class="btn" style="display:none;">Se déconnecter</button>
 </div>
 <div class="content-section">
+    <h2>Flux vidéo de traduction</h2>
+    <div id="video-container" style="width: 100%; max-width: 640px; border-radius: 8px; overflow: hidden; display: none;">
+        <img id="video-stream" src="" alt="Flux vidéo" style="width: 100%; display: block;">
+    </div>
+    <p id="video-placeholder" style="text-align: center; color: #666; padding: 40px;">Le flux vidéo apparaîtra ici après le démarrage de la traduction</p>
+</div>
+<div class="content-section">
     <h2>Appareils disponibles</h2>
     <button id="bt-scan-btn" class="btn primary">Scanner les appareils</button>
     <ul id="bt-devices-list"></ul>

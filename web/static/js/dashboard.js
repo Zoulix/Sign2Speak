@@ -237,6 +237,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const startBtn = document.getElementById('translation-start-btn');
         const stopBtn = document.getElementById('translation-stop-btn');
         const devicesList = document.getElementById('bt-devices-list');
+        const videoStream = document.getElementById('video-stream');
+        const videoContainer = document.getElementById('video-container');
+        const videoPlaceholder = document.getElementById('video-placeholder');
+        
+        let videoInterval = null;
 
         scanBtn.addEventListener('click', async () => {
             devicesList.innerHTML = '<li>Scan en cours...</li>';
@@ -289,13 +294,39 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 await fetchWithAuth('/api/bluetooth/translation/start', { method: 'POST' });
                 getBluetoothStatus();
-            } catch (error) { alert('Erreur au démarrage.'); }
+                // Démarrer le flux vidéo avec polling après un délai
+                if (videoStream && videoContainer && videoPlaceholder) {
+                    videoContainer.style.display = 'block';
+                    videoPlaceholder.style.display = 'none';
+                    
+                    // Attendre 2 secondes pour que le moteur démarre
+                    setTimeout(() => {
+                        // Recharger l'image toutes les 100ms
+                        videoInterval = setInterval(() => {
+                            const timestamp = new Date().getTime();
+                            videoStream.src = `/api/video/frame?t=${timestamp}`;
+                        }, 100);
+                    }, 2000);
+                }
+            } catch (error) { 
+                alert('Erreur au démarrage.'); 
+            }
         });
 
         stopBtn.addEventListener('click', async () => {
             try {
                 await fetchWithAuth('/api/bluetooth/translation/stop', { method: 'POST' });
                 getBluetoothStatus();
+                // Arrêter le flux vidéo
+                if (videoInterval) {
+                    clearInterval(videoInterval);
+                    videoInterval = null;
+                }
+                if (videoStream && videoContainer && videoPlaceholder) {
+                    videoStream.src = '';
+                    videoContainer.style.display = 'none';
+                    videoPlaceholder.style.display = 'block';
+                }
             } catch (error) { alert("Erreur à l'arrêt."); }
         });
     }

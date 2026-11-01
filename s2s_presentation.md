@@ -66,7 +66,3 @@ C'est le cœur de l'interface, gérant l'interaction audio avec les périphériq
 
 - **Gestion des appareils** : Affiche la liste des appareils Bluetooth disponibles et la preuve de connexion d'un appareil appairé (nom, adresse MAC).
 - **Contrôle de la traduction** : Comprend des boutons dédiés pour Démarrer et Arrêter le processus de traduction de la langue des signes.
-
-sk-ws-01-y_WCdlBIFo1_fGj9S-TxbTGD3piT-T0WWV6ZLsrKnW7lqp2YIlKGVjby0MTXQc68G_zCnEz2cFKXbuQ9A-L1yQYBN-xGEg
-uvicorn src.main:app --reload
-uvicorn src.main:app --host 0.0.0.0 --port 8000
