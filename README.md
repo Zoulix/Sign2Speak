@@ -285,6 +285,12 @@ Le système affiche les latences suivantes dans le terminal :
 - **Latence Totale** : Temps total de traduction + génération
 - **Temps Routage Audio Complet** : Temps de génération + lecture
 
+## 🎬 Démo
+
+Vidéo de démonstration du système Sign2Speak :
+
+<video src="demo.mp4" controls width="640"></video>
+
 ## 🤝 Contributing
 
 Les contributions sont les bienvenues ! Pour contribuer :
