@@ -289,7 +289,7 @@ Le système affiche les latences suivantes dans le terminal :
 
 Vidéo de démonstration du système Sign2Speak :
 
-<video src="demo.mp4" controls width="640"></video>
+<video src="demo_ZXBJemYl.mp4" controls width="640"></video>
 
 ## 🤝 Contributing
 
